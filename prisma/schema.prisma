@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  key       String
+  source    String
+  type      String
+  ext       String
+  size      String
+  sizeRaw   Int
+  status    String   @default("published")
+  createdAt DateTime @default(now())
+  upatedAt  DateTime @default(now())
+  project   String   @default("kuminda")
+}
+
+model Page {
+  id        String   @id @default(uuid())
+  route     String
+  status    String
+  entry     String
+  createdAt DateTime @default(now())
+  upatedAt  DateTime @default(now())
+  project   String   @default("kuminda")
+}
