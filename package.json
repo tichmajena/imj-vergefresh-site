@@ -1,12 +1,12 @@
 {
-	"name": "picturehub",
+	"name": "vergefresh",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev --port 5228",
+		"dev": "vite dev --port 5230",
 		"build": "vite build",
-		"preview": "vite preview --port 4228",
+		"preview": "vite preview --port 4230",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -54,12 +54,16 @@
 		"@aws-sdk/client-s3": "^3.782.0",
 		"@aws-sdk/client-sesv2": "^3.782.0",
 		"@aws-sdk/s3-request-presigner": "^3.782.0",
+		"@fontsource/fira-sans": "^5.2.7",
 		"@googlemaps/js-api-loader": "^1.16.8",
-		"@prisma/client": "^6.5.0",
+		"@node-rs/argon2": "^2.0.2",
+		"@oslojs/crypto": "^1.0.1",
+		"@oslojs/encoding": "^1.1.0",
+		"@prisma/client": "^6.19.0",
 		"blurhash": "^2.0.5",
 		"fast-blurhash": "^1.1.4",
-		"prisma": "^6.5.0",
-		"svelte-youtube-lite": "^1.2.1"
+		"prisma": "^6.19.0",
+		"svelte-youtube-lite": "^1.2.1",
+		"zod": "3.24.3"
 	}
 }
-

@@ -7,7 +7,7 @@
 	import IconVision from '../icons/IconVision.svelte';
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront, h = 'h3', p = 'p' } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
 	let list_style = $derived(block.list_style);
@@ -26,14 +26,14 @@
 		<!-- svelte-ignore a11y_img_redundant_alt -->
 		<img
 			class:reduce-width={block.image.indexOf('.svg') > -1}
-			src={block.image}
+			src="{cloudfront}/fit-in/800x600/{block.image}"
 			alt={svedit.entry_session.get([...path, 'title'])[0]}
 		/>
 	</div>
 	<div class="caption">
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
+		<Text class="heading2" path={[...path, 'title']} {editable} element={h} />
+		<Text class="body" path={[...path, 'description']} {editable} element={p} />
 		<Container class="list" path={[...path, 'items']}>
 			<!-- NOTE: We only allow list items inside list  -->
 			{#snippet block(block, path)}
@@ -72,8 +72,8 @@
 	</div>
 	<div class="caption">
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
+		<Text class="heading2" path={[...path, 'title']} {editable} />
+		<Text class="body" path={[...path, 'description']} {editable} />
 		<Container class="list" path={[...path, 'items']}>
 			<!-- NOTE: We only allow list items inside list  -->
 			{#snippet block(block, path)}

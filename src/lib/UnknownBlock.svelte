@@ -1,7 +1,7 @@
 <script>
 	import { getContext } from 'svelte';
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront } = $props();
 	import Text from '$lib/Text.svelte';
 	import Field from './components/Field.svelte';
 	import TextArea from './components/TextArea.svelte';
@@ -49,14 +49,17 @@
 		{:else}
 			<div class="non-text-content overflow-hidden rounded-xl" contenteditable="false">
 				<!-- svelte-ignore a11y_img_redundant_alt -->
-				<img src={block.image} alt={svedit.entry_session.get([...path, 'title'])[0]} />
+				<img
+					src="{cloudfront}/fit-in/800x600/{block.image}"
+					alt={svedit.entry_session.get([...path, 'title'])[0]}
+				/>
 			</div>
 		{/if}
 		<div>
 			<div class="caption">
 				<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-				<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-				<Text class="body" path={[...path, 'description']} editable={block.editable} />
+				<Text class="heading2" path={[...path, 'title']} {editable} />
+				<Text class="body" path={[...path, 'description']} {editable} />
 			</div>
 			{#if block.type === 'sign_up'}
 				<form action="" class="mt-4 bg-inherit">
@@ -109,8 +112,8 @@
 		</div>
 		<div class="caption">
 			<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-			<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-			<Text class="body" path={[...path, 'description']} editable={block.editable} />
+			<Text class="heading2" path={[...path, 'title']} {editable} />
+			<Text class="body" path={[...path, 'description']} {editable} />
 		</div>
 	</div>
 {:else}

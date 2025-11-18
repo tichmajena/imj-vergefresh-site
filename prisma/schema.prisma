@@ -19,7 +19,7 @@ model Media {
   status    String   @default("published")
   createdAt DateTime @default(now())
   upatedAt  DateTime @default(now())
-  project   String   @default("kuminda")
+  project   String   @default("vergefresh")
 }
 
 model Page {
@@ -29,5 +29,37 @@ model Page {
   entry     String
   createdAt DateTime @default(now())
   upatedAt  DateTime @default(now())
-  project   String   @default("kuminda")
+  project   String   @default("vergefresh")
+}
+
+model User {
+  id       String    @id @default(uuid())
+  sessions Session[]
+  role     Role      @default(BASIC)
+  email    String    @unique
+  password Password?
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Password {
+  id             Int    @id @default(autoincrement())
+  hashedPassword String
+  userId         String @unique
+  user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum Role {
+  BASIC
+  SUPPORT
+  EDITOR
+  ADMIN
+  SUPERADMIN
 }

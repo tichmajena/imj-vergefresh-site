@@ -22,6 +22,7 @@
 	import { dev } from '$app/environment';
 	// import HeroSlide from '$lib/components/HeroSlide.svelte';
 	import StoryVideo from '$lib/StoryVideo.svelte';
+	import FeatureBlock from '$lib/FeatureBlock.svelte';
 
 	let { data } = $props();
 	let page_json = $state(data.entry);
@@ -56,13 +57,14 @@
 	let modals = $state(false);
 	let row = $state(false);
 
-	const siteUrl = 'https://www.kuminda.net';
+	const siteUrl = 'https://www.vergefresh.co.uk';
 	const img1 = siteUrl + '/images/seo/logo-16x9.jpg';
 	const img2 = siteUrl + '/images/seo/logo-4x3.jpg';
 	const img3 = siteUrl + '/images/seo/logo-1x1.jpg';
-	const siteTitle = '';
-	const metaTitle = '';
-	const metadescription = '';
+	const siteTitle = 'Verge Fresh - Fresh Produce Suppliers';
+	const metaTitle = 'Importers and Suppliers of Fresh Produce in the UK';
+	const metadescription =
+		'Large range of fresh fruits and vegetables supplied to retailers and wholesalers across the UK.';
 	const telephone = '';
 	const facebookPage = '';
 	const twitterHandle = '';
@@ -82,9 +84,9 @@
 	pageTitle={metaTitle}
 	image={{ url: img1, alt: '' }}
 	squareImage={{ url: img3, alt: '' }}
-	ogLanguage={'en-ZW'}
+	ogLanguage={'en-UK'}
 />
-<SEO
+<!-- <SEO
 	{siteUrl}
 	{siteTitle}
 	services={[]}
@@ -97,7 +99,7 @@
 	{twitterHandle}
 	{address}
 	{linkedinProfile}
-/>
+/> -->
 
 <!-- <ViewTransition></ViewTransition> -->
 {#if showLightbox}
@@ -111,76 +113,22 @@
 		}}
 	/>
 {/if}
-<div class="demo-wrapper">
-	{#if dev}
+<div class="demo-wrapper pb-20">
+	{#if data.user?.exists === true}
 		<TextToolBar {entry_session} />
 	{/if}
 
-	<!-- <div class="container-2xl mx-auto h-[70vh] w-full overflow-hidden pr-40">
-		<img src={packhouse_img} class="h-full w-full object-cover" alt="" />
-	</div> -->
+	<div class="relative h-screen w-full overflow-hidden">
+		<img class="relative h-full w-full object-cover" src="/images/vergefresh-hero-01.jpg" alt="" />
+		<div
+			class="from-base-300/80 via-base-300/50 absolute top-0 right-0 bottom-0 left-0 h-72 bg-gradient-to-b to-transparent"
+		></div>
+	</div>
 
-	<!-- <div class="container mx-auto flex w-full justify-center overflow-hidden">
-		<video muted autoplay loop disablepictureinpicture>
-			<source
-				src="https://sdcdc213s.cloudfront.net/video-bg-1_10-720.mp4"
-				type="video/mp4"
-			/>
-		</video>
-	</div> -->
-
-	<!-- <HeroSlide
-		slides={[
-			{
-				title: 'Fresh Produce',
-				description: 'Certified healthy fruits and vegetables in quality packaging.',
-				slug: 'duravit',
-				image: packhouse_img
-			},
-			{
-				title: 'Packhouse',
-				description: 'Certified healthy fruits and vegetables in quality packaging.',
-				slug: 'about',
-				image: packhouse_img
-			},
-			{
-				title: 'Outgrower Programs',
-				description: 'Great stuff',
-				slug: 'about',
-				image: packhouse_img
-			},
-			{
-				title: 'Development Programs Programs',
-				description: 'Great stuff',
-				slug: 'about',
-				image: packhouse_img
-			}
-		]}
-	/> -->
-
-	<!-- <pre class="text-xs text-lime-500">
-  
-          {JSON.stringify(page_json, null, 2)}
-      </pre> -->
-
-	<Svedit {entry_session} editable={dev} class="flex-column">
-		<!-- <div class="flex-column container mx-auto w-full gap-y-10 p-10">
-        <div class="flex-row flex-wrap items-center gap-5">
-          <Text path={['title']} class="heading1 m-0" />
-          <a
-            class="github-button"
-            href="https://github.com/michael/svedit"
-            data-color-scheme="no-preference: light; light: light; dark: dark;"
-            data-size="large"
-            data-show-count="true"
-            aria-label="Star michael/svedit on GitHub">Star</a
-          >
-        </div>
-        <Text path={['subtitle']} class="heading3" />
-      </div> -->
+	<Svedit {entry_session} editable={data.user?.exists === true} class="flex-column">
 		<!-- NOTE: non-editable island must have contenteditable="false" and contain some text content, otherwise invalid selections occur. -->
-		<div class="container mx-auto px-6 py-10">
-			<div class="w-full md:w-2/3">
+		<div class="container mx-auto px-6 py-20">
+			<div class="w-full max-w-screen-lg md:w-2/3">
 				<Text path={['title']} class="mb-4 text-3xl font-bold text-green-800 md:text-4xl" />
 				<Text path={['subtitle']} class="text-xl md:text-2xl" />
 			</div>
@@ -188,44 +136,46 @@
 		<Container class="body flex-column gap-y-10" path={['body']}>
 			{#snippet block(block, path)}
 				{#if block.type === 'story'}
-					<StoryBlock {block} {path} />
+					<StoryBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
+				{:else if block.type === 'cta'}
+					<CtaBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'story_list'}
-					<StoryList {block} {path} />
+					<StoryList cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'story_video'}
-					<StoryVideo {block} {path} />
+					<StoryVideo cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'brand'}
-					<BrandBlock {block} {path} />
+					<BrandBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'lightbox_grid'}
-					<BlockTest {block} {path} />
+					<BlockTest cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'list'}
-					<ListBlock {block} {path} />
+					<ListBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{:else if block.type === 'text'}
 					<Text {path} class="heading1 m-0" />
 				{:else}
-					<UnknownBlock {block} {path} />
+					<UnknownBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
 				{/if}
 			{/snippet}
 		</Container>
-		<div contenteditable="false" class="container mx-auto pt-20">
-			<div class="mx-auto w-2/3">
-				<div class="mb-4 text-center text-3xl font-bold text-green-800 md:text-4xl">Heading</div>
-				<div path={['subtitle']} class="text-center text-xl text-green-800 md:text-2xl">
-					This is text under the heading
-				</div>
-			</div>
-		</div>
+		<Container
+			class="body container mx-auto grid grid-cols-1 gap-y-10 px-6 md:grid-cols-2 "
+			path={['sidebar']}
+		>
+			{#snippet block(block, path)}
+				{#if block.type === 'story'}
+					<FeatureBlock cloudfront={data.cloudfront} editable={data.user?.exists === true} {path} />
+				{/if}
+			{/snippet}
+		</Container>
 	</Svedit>
 
-	<!-- <button onclick={test} class="btn">Test</button>
-  
-      <hr />
-  
-      <div class="flex-column mx-auto my-10 w-full max-w-screen-lg gap-y-2">
-          <p>Selection:</p>
-          <pre class="debug-info p-4">{JSON.stringify(entry_session.selection || {}, null, '  ')}</pre>
-          <p>Entry:</p>
-          <pre class="debug-info p-4">{JSON.stringify(entry_session.entry, null, '  ')}</pre>
-      </div> -->
+	<!-- <hr />
+
+	<div class="flex-column mx-auto my-10 w-full max-w-screen-lg gap-y-2">
+		<p>Selection:</p>
+		<pre class="debug-info p-4">{JSON.stringify(entry_session.selection || {}, null, '  ')}</pre>
+		<p>Entry:</p>
+		<pre class="debug-info p-4">{JSON.stringify(entry_session.entry, null, '  ')}</pre>
+	</div> -->
 </div>
 
 <style>

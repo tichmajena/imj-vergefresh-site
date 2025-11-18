@@ -6,7 +6,7 @@
 	import IconFacebook from '$icons/IconFacebook.svelte';
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
 </script>
@@ -25,12 +25,15 @@
 	>
 		<!-- svelte-ignore a11y_img_redundant_alt -->
 
-		<img src={block.image} alt={svedit.entry_session.get([...path, 'title'])[0]} />
+		<img
+			src="{cloudfront}/fit-in/800x600/{block.image}"
+			alt={svedit.entry_session.get([...path, 'title'])[0]}
+		/>
 	</div>
 	<div class="caption">
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
+		<Text class="heading2" path={[...path, 'title']} {editable} />
+		<Text class="body" path={[...path, 'description']} {editable} />
 		<a href={block.link} class="btn btn-primary mt-4"> View </a>
 	</div>
 </div>

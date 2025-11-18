@@ -2,3 +2,125 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
+
+:root {
+	--menu-active-bg: #006938 !important;
+}
+.menu {
+	& :where(li) {
+		& > :not(ul, .menu-title, details, .btn):active,
+		& > :not(ul, .menu-title, details, .btn).menu-active,
+		& > details > summary:active {
+			color: var(--menu-active-fg);
+			background-color: #006938;
+			background-size: auto, calc(var(--noise) * 100%);
+			background-image: none, var(--fx-noise);
+		}
+	}
+}
+@plugin 'daisyui/theme' {
+	name: 'light';
+	default: true;
+	prefersdark: false;
+	color-scheme: 'light';
+	--color-primary: #006938;
+	--color-base-300: #006938;
+	--color-base-100: #ffffff;
+	--menu-active-bg: #006938;
+	--text-colored: #006938;
+	--text-colored-light: #006938;
+}
+@plugin 'daisyui/theme' {
+	name: 'dark';
+	default: false;
+	prefersdark: false;
+	color-scheme: 'dark';
+	--color-primary: #006938;
+	--color-base-300: #006938;
+	--color-base-100: oklch(0.19 0.03 127.91);
+	--menu-active-bg: #006938;
+	--text-colored: #ffffff;
+	--text-colored-light: #ffffff;
+}
+@font-face {
+	font-family: 'Barmeno Extra Bold';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('Barmeno Extra Bold'),
+		url('$lib/fonts/barmeno-extra-bold.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Barmeno Regular';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('Barmeno Regular'),
+		url('$lib/fonts/barmeno-regular.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Barmeno Medium';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('Barmeno Medium'),
+		url('$lib/fonts/barmeno-medium.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Barmeno Bold';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('Barmeno Bold'),
+		url('$lib/fonts/barmeno-bold.woff') format('woff');
+}
+
+@theme {
+	--color-farm-green-100: oklch(0.68 0.16 142.5);
+	--color-farm-green-200: oklch(0.57 0.18 142.5); /* #61924D */
+	--color-farm-green-300: oklch(0.55 0.21 136.5); /* #5A8E3F */
+	--color-farm-green-400: oklch(0.34 0.22 115.5); /* #3D5122 */
+	--color-farm-brown: oklch(44.83% 0.12 52.86); /* #724E1F */
+	--color-farm-gold: oklch(0.62 0.14 98.5); /* #99945C */
+	--font-barmeno-extrabold: Barmeno Extra Bold, 'sans-seriff';
+	--font-barmeno-bold: Barmeno Bold, 'sans-seriff';
+	--font-barmeno-medium: Barmeno Medium, 'sans-seriff';
+	--font-barmeno-regular: Barmeno Regular, 'sans-seriff';
+	--menu-active-bg: oklch(0.598 0.147 134.4);
+}
+body {
+	font-family: 'Fira Sans', 'sans-seriff';
+	weight: 300;
+}
+h1,
+h2,
+h3,
+h4 {
+	/* font-family: 'Barmeno Bold'; */
+}
+.heading1 {
+	/* font-family: 'Barmeno Bold'; */
+	@apply mb-4 text-3xl font-bold md:mb-8 md:text-6xl;
+}
+.heading2 {
+	/* font-family: 'Barmeno Bold'; */
+	@apply mb-4 text-2xl font-bold md:text-4xl;
+}
+
+.heading3 {
+	@apply mb-4 text-xl font-bold md:text-2xl;
+}
+.body {
+	@apply text-lg font-bold md:text-xl;
+}
+
+div:has(+ .section) .line {
+	/* styles for the div immediately before a .section element */
+	height: 1em;
+}
+.experience-list > [data-type='block']:last-child #line {
+	height: 1em;
+}

@@ -3,7 +3,7 @@
 	import Text from '$lib/Text.svelte';
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
 	// console.log(block);

@@ -24,16 +24,22 @@
 	<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col">
 		<!-- Navbar -->
-		<div class="navbar bg-base-100 container mx-auto w-full">
-			<div class="mr-2 flex-1 pr-2">
-				<a href="/"> <Logo></Logo></a>
+		<div class="navbar absolute top-0 right-0 left-0 z-40 container mx-auto w-full bg-transparent">
+			<div class="relative z-40 mr-2 flex-1 pr-2">
+				{#if $page.url.pathname !== '/'}
+					<a href="/"><Logo></Logo></a>
+				{/if}
 			</div>
 			<div class="hidden flex-none lg:block">
-				<ul class="menu menu-horizontal">
+				<ul
+					class:text-white={$page.url.pathname === '/'}
+					class:text-green-800={$page.url.pathname !== '/'}
+					class="menu menu-horizontal"
+				>
 					<!-- Navbar menu content here -->
-					<li><a class="text-base-content no-underline" href="/">Home</a></li>
-					<li><a class="text-base-content no-underline" href="/about">About</a></li>
-					<li><a class="text-base-content no-underline" href="/team">Team</a></li>
+					<li><a class="no-underline" href="/">About</a></li>
+					<li><a class="no-underline" href="/produce">Produce</a></li>
+					<li><a class=" no-underline" href="/contact">Contact</a></li>
 					<!-- <div class="dropdown dropdown-end dropdown-hover">
 						<div tabindex="0" role="button" class="the-drop">Brands</div>
 						<ul
@@ -52,7 +58,6 @@
 					<!-- <li>
 						<a class="text-base-content no-underline" href="/about">Resources</a>
 					</li> -->
-					<li><a class="text-base-content no-underline" href="/contact">Contact</a></li>
 
 					<form
 						use:enhance
@@ -119,108 +124,24 @@
 	</div>
 
 	{#snippet footer()}
-		<!-- <footer class=" -mt-1 w-full bg-[#006838] p-10 text-white">
-			<div class="footer container mx-auto">
-				<nav>
-					<h6 class="footer-title">Contact</h6>
-					<div class="flex flex-col text-xs">
-						<div class="flex w-fit flex-row space-x-6">
-							<div class="w-6">
-								<Location />
-							</div>
-							<div class="mx-2 text-lg font-medium">
-								<a
-									href="https://maps.app.goo.gl/F3Lx27MAjX8Y8WfN6"
-									target="_blank"
-									class="text-sm text-white no-underline"
-									rel="noreferrer"
-								>
-									Stand 479 Pomona, Harare Drive<br /> Harare, Zimbabwe
-								</a>
-							</div>
-						</div>
-						<div class="flex w-fit flex-row space-x-6">
-							<div class="w-6">
-								<Telephone />
-							</div>
-							<div class="mx-2 text-lg font-medium">
-								<a class="text-sm text-white no-underline" href="tel:+263 771 387 703">
-									+263 771 387 703
-								</a><br />
-								<a class="text-sm text-white no-underline" href="tel:+263 771 637 769">
-									+263 771 637 769
-								</a><br />
-								<a class="text-sm text-white no-underline" href="tel:+263 771 600 124">
-									+263 771 600 124
-								</a><br />
-							</div>
-						</div>
-						<div class="flex w-fit flex-row space-x-6">
-							<div class="w-6">
-								<Mail />
-							</div>
-							<div class="mx-2 text-lg font-medium">
-								<a class="text-sm text-white no-underline" href="mailto:info@kuminda.net">
-									info@kuminda.net
-								</a>
-							</div>
-						</div>
-						<div class="flex w-fit flex-row space-x-6">
-							<div class="w-6">
-								<Clock />
-							</div>
-							<div class="mx-2 text-lg font-medium">
-								<div class="text-sm text-white no-underline">Mon-Fri 8:00 AM - 5:00 PM</div>
-							</div>
-						</div>
-					</div>
-				</nav>
-				<nav>
-					<h6 class="footer-title">About</h6>
-					<a href="/about" class="link-hover link text-[--light]">About</a>
-				</nav>
-				<nav>
-					<h6 class="footer-title">Company</h6>
-					<a href="/" class="link-hover link text-[--light]">Home</a>
-					<a href="/about" class="link-hover link text-[--light]">Approach</a>
-					<a href="/about" class="link-hover link text-[--light]">Our Story</a>
-					<a href="/about" class="link-hover link text-[--light]">Team</a>
-					<a href="/contact" class="link-hover link text-[--light]">Contact</a>
-				</nav>
-
-				<nav>
-					<h6 class="footer-title">Social</h6>
-					<div class="grid grid-flow-col gap-4 text-[--light]">
-						<a aria-label="instagram" href={socials.instagram} target="_blank">
-							<IconInstagram />
-						</a>
-						<a aria-label="youtube" href={socials.youtube} target="_blank">
-							<IconYoutube />
-						</a>
-						<a aria-label="facebook" href={socials.facebook} target="_blank">
-							<IconFacebook />
-						</a>
-					</div>
-				</nav>
-			</div>
-		</footer> -->
-		<footer class="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
+		<footer class="footer sm:footer-horizontal bg-base-300 p-10 text-white">
 			<nav>
-				<h6 class="footer-title">Services</h6>
+				<h6 class="footer-title">Company</h6>
+				<a href="/" class="link link-hover">About us</a>
+				<a href="/produce" class="link link-hover">Produce</a>
+				<a href="/contact" class="link link-hover">Contact</a>
+			</nav>
+			<nav>
+				<div>&copy; Copyright Verge Fresh Ltd - 2025.<br />All rights reserved.</div>
+				<!-- <h6 class="footer-title">Services</h6>
 				<a class="link link-hover">Branding</a>
 				<a class="link link-hover">Design</a>
 				<a class="link link-hover">Marketing</a>
-				<a class="link link-hover">Advertisement</a>
+				<a class="link link-hover">Advertisement</a> -->
 			</nav>
+
 			<nav>
-				<h6 class="footer-title">Company</h6>
-				<a class="link link-hover">About us</a>
-				<a class="link link-hover">Contact</a>
-				<a class="link link-hover">Jobs</a>
-				<a class="link link-hover">Press kit</a>
-			</nav>
-			<nav>
-				<h6 class="footer-title">Social</h6>
+				<!-- <h6 class="footer-title">Social</h6>
 				<div class="grid grid-flow-col gap-4">
 					<a>
 						<svg
@@ -261,7 +182,10 @@
 							></path>
 						</svg>
 					</a>
-				</div>
+				</div> -->
+			</nav>
+			<nav>
+				<a href="/" class="link link-hover"><Logo --text-colored="#ffffff" /></a>
 			</nav>
 		</footer>
 	{/snippet}
@@ -270,10 +194,8 @@
 		<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu min-h-full w-80 bg-[#006838] p-4 text-white">
 			<!-- Sidebar content here -->
-			<li><a class="no-underline" href="/">Home</a></li>
-			<li><a class="no-underline" href="/about">About</a></li>
-			<li><a class="no-underline" href="/team">Team</a></li>
-			<!-- <li><a class="no-underline" href="/showroom">Packhouse</a></li> -->
+			<li><a class="no-underline" href="/">About</a></li>
+			<li><a class="no-underline" href="/produce">Produce</a></li>
 			<li><a class="no-underline" href="/contact">Contact</a></li>
 		</ul>
 	</div>

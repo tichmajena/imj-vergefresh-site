@@ -17,6 +17,7 @@
 	<input
 		placeholder={label}
 		type="text"
+		{name}
 		class:error-input={message?.code === 'error'}
 		class:warning-input={message?.code === 'warning'}
 		class:success-input={message?.code === 'success'}

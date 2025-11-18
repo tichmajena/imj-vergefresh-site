@@ -11,7 +11,7 @@
 	data-type="block"
 	data-index={path.at(-1)}
 	style="anchor-name: --{path.join('-')};"
-	class="mx-auto max-w-screen-md p-10"
+	class="mx-auto max-w-screen-md"
 >
 	<Container class="list" path={[...path, 'items']}>
 		<!-- NOTE: We only allow list items inside list  -->
@@ -24,6 +24,6 @@
 <style>
 	div :global(.list) {
 		background: var(--base-200);
-		padding: var(--s-4);
+		/* padding: var(--s-4); */
 	}
 </style>

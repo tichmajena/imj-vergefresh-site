@@ -1,70 +1,56 @@
 <script>
 	import { getContext } from 'svelte';
 	import Text from '$lib/Text.svelte';
-	import IconValues from '../icons/IconValues.svelte';
-	import IconMission from '../icons/IconMission.svelte';
-	import IconVision from '../icons/IconVision.svelte';
+	import ListItemBlock from './ListItemBlock.svelte';
+	import Container from './Container.svelte';
+
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, h = 'h3', p = 'p', editable = true, cloudfront } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
+	let list_style = $derived(block.list_style);
+
+	import Icon from '$lib/IconHandler.svelte';
+	$inspect(editable);
 </script>
 
 <div
-	class:hidden={block.classes.includes('icon')}
-	class:grid={!block.classes.includes('icon')}
-	class="story-block layout-{block.layout} {block.classes} container mx-auto w-full"
+	class="story-block layout-{block.layout} {block.classes} container mx-auto grid w-full"
 	data-path={path.join('.')}
 	data-type="block"
 	data-index={path.at(-1)}
 	style="anchor-name: --{path.join('-')};"
 >
-	<div class="non-text-content overflow-hidden" contenteditable="false">
+	<div class="non-text-content relative overflow-hidden" contenteditable="false">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
-		<img src={block.image} alt={svedit.entry_session.get([...path, 'title'])[0]} />
-	</div>
-	<div class="caption">
-		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
-	</div>
-</div>
 
-<div
-	class:hidden={!block.classes.includes('icon')}
-	class:grid={block.classes.includes('icon')}
-	class="story-block layout-{block.layout} {block.classes} svg-icon mx-auto w-full max-w-screen-md border-b-2 border-green-700 px-6"
-	data-path={path.join('.')}
-	data-type="block"
-	data-index={path.at(-1)}
-	style="anchor-name: --{path.join('-')};"
->
-	<div class="non-text-content w-1/2 overflow-hidden text-green-800" contenteditable="false">
-		<!-- svelte-ignore a11y_img_redundant_alt -->
-		<div class="w-1/2">
-			{#if block.image.indexOf('values') > -1}
-				<IconValues />
-			{:else if block.image.indexOf('mission') > -1}
-				<IconMission />
-			{:else if block.image.indexOf('vision') > -1}
-				<IconVision />
-			{:else}
-				<svg fill="currentColor">
-					<use href={block.image}></use>
-				</svg>
-			{/if}
-		</div>
+		<img
+			class:reduce-width={block.image.indexOf('.svg') > -1}
+			src="{cloudfront}/fit-in/800x600/{block.image}"
+			alt={svedit.entry_session.get([...path, 'title'])[0]}
+		/>
+		<div class="absolute top-0 right-0 bottom-0 left-0 bg-black/30"></div>
+		<div class="absolute top-0 right-0 bottom-0 left-0 opacity-40 {block.classes}"></div>
 	</div>
-	<div class="caption">
+
+	<div class="caption px-6 pt-6 pb-12 md:px-12">
+		<!-- <Icon icon={block.icon} class="mb-4 w-12"></Icon> -->
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
+		<Text class="heading2 text-green-800" path={[...path, 'title']} {editable} element={h} />
+		<Text class="body font-light" path={[...path, 'description']} {editable} element={p} />
+		<Container class="list" path={[...path, 'items']}>
+			<!-- NOTE: We only allow list items inside list  -->
+			{#snippet block(block, path)}
+				<ListItemBlock {block} {path} {list_style} />
+			{/snippet}
+		</Container>
 	</div>
 </div>
 
 <style>
-	@reference '../app.css'
+	@reference '../app.css';
+
 	.story-block {
 		container-type: inline-size;
 		grid-template-columns: 1fr;
@@ -72,18 +58,14 @@
 		/* Learn more about this technique here: https://kulturbanause.de/blog/websites-fuer-das-iphone-x-optimieren-weisse-balken-entfernen-viewport-anpassen-safe-area-festlegen/ */
 		/* padding-inline-start: max(var(--s-10), env(safe-area-inset-left, 0px));
     padding-inline-end: max(var(--s-10), env(safe-area-inset-right, 0px)); */
-		padding-block-start: max(var(--s-10), env(safe-area-inset-top, 0px));
-		padding-block-end: max(var(--s-10), env(safe-area-inset-bottom, 0px));
+		/*  padding-block-start: max(var(--s-10), env(safe-area-inset-top, 0px));
+		padding-block-end: max(var(--s-10), env(safe-area-inset-bottom, 0px)); */
 		@media (min-width: 768px) {
 			grid-template-columns: 1fr 1fr;
 		}
-		gap: var(--s-10);
+		/* gap: var(--s-10);*/
 	}
 	.story-block img {
-		width: 100%;
-		height: auto;
-	}
-	.story-block svg {
 		width: 100%;
 		height: auto;
 	}
@@ -135,13 +117,26 @@
 		@apply bg-[--accented] px-8;
 	}
 
-	/* svg {
-		//color: var(--icon-color, var(--primary-text-color));
-		fill: red;
-		user-select: none;
-		object-fit: contain;
-		object-position: center;
-		width: var(--icon-size, 20px);
-		height: var(--icon-size, 20px);
-	} */
+	.reduce-width {
+		@apply !w-1/2;
+	}
+
+	.bg-farm-green-100 {
+		@apply bg-farm-green-100;
+	}
+	.bg-farm-green-200 {
+		@apply bg-farm-green-200;
+	}
+	.bg-farm-green-300 {
+		@apply bg-farm-green-300;
+	}
+	.bg-farm-green-400 {
+		@apply bg-farm-green-400;
+	}
+	.bg-farm-brown {
+		@apply bg-farm-brown;
+	}
+	.bg-farm-gold {
+		@apply bg-farm-gold;
+	}
 </style>

@@ -3,7 +3,13 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			theme: String | null;
+			cf: String | null;
+			cloudfront: String;
+			user: User | null;
+			session: Session | null;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}

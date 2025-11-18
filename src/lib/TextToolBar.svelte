@@ -31,10 +31,11 @@
 	const s = $derived(entry_session.selection?.type);
 	const b = $derived(entry_session.selected_block?.type);
 	let modals = $state(false);
-	let row = $state(false);
+	let row = $state(true);
 	let blockTypes = $state(false);
 	let lightboxEditor = $state(false);
 	let imageGrid = $state([]);
+	let imageUri = $state('');
 	let slideTitle = $state('');
 	let slideDescription = $state('');
 	let slideAlt = $state('');
@@ -83,7 +84,7 @@
 				if (!block?.images) {
 					entry_session.set([...selected_block_path, 'images'], []);
 				}
-			} else if (type === 'story_list') {
+			} else if (type === 'story_list' || type === 'list') {
 				const block = entry_session.get_selected_block();
 				entry_session.set([...selected_block_path, 'layout'], 1);
 				if (!block?.items) {
@@ -100,6 +101,8 @@
 				if (!block?.list_style) {
 					entry_session.set([...selected_block_path, 'list_style'], 'decimal-leading-zero');
 				}
+			} else if (type === 'list') {
+				//
 			}
 		}
 	}
@@ -117,9 +120,16 @@
 
 	function handle_image_change(imageKey, size = '800x600') {
 		const selected_block_path = entry_session.selected_block_path;
-		const imageUrl = `${$page.data.cloudfront}/fit-in/${size}/${imageKey}`;
-		console.log({imageUrl, selected_block_path});
-		
+		//const imageUrl = `${$page.data.cloudfront}/fit-in/${size}/${imageKey}`;
+		const imageUrl = `${imageKey}`;
+		if (selected_block_path) {
+			entry_session.set([...selected_block_path, 'image'], imageUrl);
+		}
+	}
+	function handle_image_uri(imageKey) {
+		const selected_block_path = entry_session.selected_block_path;
+		const imageUrl = `${imageKey}`;
+
 		if (selected_block_path) {
 			entry_session.set([...selected_block_path, 'image'], imageUrl);
 		}
@@ -169,7 +179,6 @@
 
 	function lightboxEditorInit() {
 		const block = entry_session.get_selected_block();
-		console.log(block);
 
 		imageGrid = block?.images || [];
 	}
@@ -233,7 +242,7 @@
 			</div>
 			<div
 				tabindex="-1"
-				class=" dropdown-content z-[1] mb-2 ml-4 w-52 rounded-box bg-base-content p-2 text-base-100 shadow"
+				class=" dropdown-content rounded-box bg-base-content text-base-100 z-[1] mb-2 ml-4 w-52 p-2 shadow"
 			>
 				<div>
 					<button onclick={() => (selectedBlockType = 'brand')} class="btn btn-ghost btn-xs"
@@ -280,6 +289,38 @@
 							handle_type_change('lightbox_grid');
 						}}
 						class="btn btn-ghost btn-xs">Lightbox Grid</button
+					>
+				</div>
+				<div>
+					<button
+						onclick={() => {
+							handle_type_change('image');
+						}}
+						class="btn btn-ghost btn-xs">Image Only</button
+					>
+				</div>
+				<div>
+					<button
+						onclick={() => {
+							handle_type_change('text');
+						}}
+						class="btn btn-ghost btn-xs">Text Only</button
+					>
+				</div>
+				<div>
+					<button
+						onclick={() => {
+							handle_type_change('list');
+						}}
+						class="btn btn-ghost btn-xs">List Only</button
+					>
+				</div>
+				<div>
+					<button
+						onclick={() => {
+							handle_type_change('richtext');
+						}}
+						class="btn btn-ghost btn-xs">Heading & Text</button
 					>
 				</div>
 				<div>
@@ -337,24 +378,23 @@
 	{/if}
 	<!-- Lightbox -->
 	{#if s === 'container' && (b === 'lightbox_grid' || b === 'team_grid')}
-		<div onclick={() => {
-			console.log({lightboxEditor});
-			
-			lightboxEditor = !lightboxEditor
-			}}
-		onkeydown={(e) => {
-			if (e.key === 'Enter') {
-				lightboxEditor = !lightboxEditor;
-			}
-		}}
-		tabindex="0"
-		role="button" class:dropdown-open={lightboxEditor} class="dropdown dropdown-right">
-			<div
-				
-				class="btn btn-circle btn-ghost btn-sm"
-				>
-			
+		<div
+			onclick={() => {
+				console.log({ lightboxEditor });
 
+				lightboxEditor = true;
+			}}
+			onkeydown={(e) => {
+				if (e.key === 'Enter') {
+					lightboxEditor = !lightboxEditor;
+				}
+			}}
+			tabindex="0"
+			role="button"
+			class:dropdown-open={lightboxEditor}
+			class="dropdown dropdown-right"
+		>
+			<div class="btn btn-circle btn-ghost btn-sm">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -372,10 +412,9 @@
 			</div>
 			<ul
 				tabindex="-1"
-				class="menu dropdown-content z-[1] mb-2 ml-4 w-52 rounded-box bg-base-content p-2 text-base-100 shadow"
+				class="menu dropdown-content rounded-box bg-base-content text-base-100 z-[1] mb-2 ml-4 w-52 p-2 shadow"
 			>
 				<li>
-					
 					{#if lightboxEditor}
 						<div
 							use:lightboxEditorInit
@@ -485,7 +524,7 @@
 			</ul>
 		</div>
 	{/if}
-	{#if s === 'container' && (b === 'story' || b === 'brand' || b === 'story_list' || b === 'story_video')}
+	{#if s === 'container' && (b === 'story' || b === 'brand' || b === 'story_list' || b === 'story_video' || b === 'richtext' || b === 'text' || b === 'image')}
 		{#each layout_options as option}
 			<button
 				onclick={() => handle_layout_change(option.value)}
@@ -538,16 +577,14 @@
 			</button>
 		{/if}
 
-		<div onclick={() => (row = !row)}
-			onkeydown={(e) => {
-				if (e.key === 'Enter') {
-					row = !row;
-				}
-			}}
-			tabindex="0"
-			role="button" class:dropdown-open={row} class="dropdown dropdown-right">
+		<div tabindex="0" role="button" class:dropdown-open={row} class="dropdown dropdown-right">
 			<div
-				
+				onclick={() => (row = !row)}
+				onkeydown={(e) => {
+					if (e.key === 'Enter') {
+						row = !row;
+					}
+				}}
 				class="btn btn-circle btn-ghost btn-sm"
 			>
 				<svg
@@ -567,7 +604,7 @@
 			</div>
 			<ul
 				tabindex="-1"
-				class="menu dropdown-content z-[1] mb-2 ml-4 w-52 rounded-box bg-base-content p-2 text-base-100 shadow"
+				class="menu dropdown-content rounded-box bg-base-content text-base-100 z-[1] mb-2 ml-4 w-52 p-2 shadow"
 			>
 				<li>
 					{#if row}
@@ -585,6 +622,25 @@
 								bind:this={Uploader}
 								on:modal={() => (modals = true)}
 							/>
+						</div>
+						<div class="flex w-full flex-col space-y-1">
+							<input
+								class="input input-primary input-xs text-base-content w-full"
+								placeholder="url..."
+								bind:value={imageUri}
+								type="text"
+							/>
+							<button
+								onclick={(e) => {
+									currentImage = imageUri;
+									if (!currentImage) return;
+									handle_image_uri(currentImage);
+									row = false;
+									(currentImage = ''), (imageUri = '');
+								}}
+								disabled={!imageUri}
+								class="btn btn-primary !btn-xs w-full">Save image</button
+							>
 						</div>
 						<!-- <button
 							onclick={() => {
@@ -646,7 +702,7 @@
 <input bind:checked={modals} type="checkbox" id="gallaries-modal" class="modal-toggle z-10" />
 <div class="modal">
 	<div class="modal-box relative w-4/5 max-w-none">
-		<label for="gallaries-modal" class="btn btn-circle btn-sm absolute right-2 top-2">✕</label>
+		<label for="gallaries-modal" class="btn btn-circle btn-sm absolute top-2 right-2">✕</label>
 		<!-- <div class="tabs">
 			<button
 				class:tab-active={galleryTab === 'unsplash'}
@@ -751,4 +807,3 @@
 		display: none; /* Safari and Chrome */
 	}
 </style>
-

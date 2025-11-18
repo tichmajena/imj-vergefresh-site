@@ -4,7 +4,7 @@
 	import Icon from './Icon.svelte';
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
 </script>
@@ -27,8 +27,8 @@
 	</div>
 	<div class="caption">
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-		<Text class="heading2" path={[...path, 'title']} editable={block.editable} />
-		<Text class="body" path={[...path, 'description']} editable={block.editable} />
+		<Text class="heading2" path={[...path, 'title']} {editable} />
+		<Text class="body" path={[...path, 'description']} {editable} />
 	</div>
 </div>
 

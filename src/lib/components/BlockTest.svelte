@@ -3,7 +3,7 @@
 	import Text from '$lib/Text.svelte';
 	const svedit = getContext('svedit');
 
-	let { path } = $props();
+	let { path, editable = true, cloudfront } = $props();
 
 	let block = $derived(svedit.entry_session.get(path));
 	let hovered = $state(-1);
@@ -12,6 +12,7 @@
 	// console.log(block);
 	import { getLightbox } from '$lib/js/Lightbox.svelte';
 	import { page } from '$app/stores';
+	import IconHandler from '$lib/IconHandler.svelte';
 
 	const lightbox = getLightbox();
 
@@ -134,7 +135,7 @@
 			class="card flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-teal-700"
 		>
 			<img
-				src="{$page.data.cloudfront}/fit-in/1000x1000/{item.url}"
+				src="{$page.data.cloudfront}/fit-in/1000x0/{item.url}"
 				alt=""
 				class="h-full w-full object-cover object-center"
 			/>
@@ -156,16 +157,19 @@
 	data-index={path.at(-1)}
 	style="anchor-name: --{path.join('-')};"
 	class:layout-3={block.layout === 3}
-	class=" container mx-auto hidden flex-col"
+	class="container mx-auto hidden flex-col"
 >
-	<div class="mx-auto my-10 grid max-w-screen-lg">
-		<div class="caption">
-			<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
-			<Text class="heading2 text-center" path={[...path, 'title']} editable={block.editable} />
-			<Text class="body text-center" path={[...path, 'description']} editable={block.editable} />
+	{#if false}
+		<div class="mx-auto my-10 grid">
+			<div class="caption">
+				<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
+				<Text class="heading2 text-center" path={[...path, 'title']} {editable} />
+				<Text class="body text-center" path={[...path, 'description']} {editable} />
+			</div>
 		</div>
-	</div>
-	<div class="mx-auto grid max-w-screen-lg grid-cols-2 gap-4 px-6 md:grid-cols-3">
+	{/if}
+	<!-- <pre>{JSON.stringify(block.images, null, 2)}</pre> -->
+	<div class="mx-auto grid grid-cols-1 gap-4 px-6 md:grid-cols-2">
 		<!--  -->
 		{#each block.images as item, i}
 			{@render card(item, i)}
@@ -184,25 +188,19 @@
 			}, 200);
 		}}
 		style:--tag={'g-image-' + item.id}
-		class:hidden={lightbox?.selected !== -1}
-		class="group card relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-none bg-teal-700 md:w-full"
+		class="group card relative flex w-full items-center justify-center overflow-hidden rounded-none md:w-full"
 	>
-		<img
-			src="{$page.data.cloudfront}/fit-in/400x400/{item.url}"
-			alt={item.alt}
-			class="relative z-0 h-full w-full object-cover object-center"
-		/>
-		{#if hovered === i}
-			<div
-				style="view-transition-name: product-image-overlay;"
-				class="bg-opacity-90 absolute z-10 h-full w-full bg-green-800 text-white"
-			>
-				<div class="absolute bottom-0 p-4 md:p-8">
-					<div class="mb-2 text-xl font-bold">{item.title}</div>
+		<div class="flex space-x-2">
+			<IconHandler class="size-12 text-green-800" />
+
+			<div style="view-transition-name: product-image-overlay;" class="h-full w-full">
+				<div class="p-4 md:p-8">
+					<div class="mb-2 text-xl font-bold text-green-800">{item.title}</div>
 					<div class="text text-sm">{item.description}</div>
 				</div>
 			</div>
-		{/if}
+		</div>
+
 		<!-- <h1 class="text-5xl text-teal-400">{item.title}</h1> -->
 	</div>
 {/snippet}

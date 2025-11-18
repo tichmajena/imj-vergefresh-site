@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	const svedit = getContext('svedit');
 
-	let { path, class: css_class, editable = true } = $props();
+	let { path, class: css_class, editable = true, cloudfront, element = 'div' } = $props();
 
 	// console.log({ path, class: css_class, editable, sv: svedit.entry_session.get(path) });
 
@@ -51,15 +51,16 @@
 	}
 </script>
 
-<!-- ATTENTION: The comment blocks are needed to prevent unwanted text nodes with whitespace. -->
-<div
-	contenteditable={editable}
-	data-type="text"
-	data-path={path.join('.')}
-	style="anchor-name: --{path.join('-')};"
-	class={css_class}
->
-	<!--
+{#if editable}
+	<!-- ATTENTION: The comment blocks are needed to prevent unwanted text nodes with whitespace. -->
+	<div
+		contenteditable={editable}
+		data-type="text"
+		data-path={path.join('.')}
+		style="anchor-name: --{path.join('-')};"
+		class={css_class}
+	>
+		<!--
 --><!-- Zero-width space for empty text --><!--
 -->{#if plain_text.length === 0}&#8203;{/if}<!--
 -->{#each fragments as fragment, index}<!--
@@ -67,24 +68,53 @@
     -->{fragment}<!--
   -->{:else if fragment.type === 'emphasis'}<!--
     --><em
-				>{fragment.content}</em
-			><!--
+					>{fragment.content}</em
+				><!--
   -->{:else if fragment.type === 'strong'}<!--
     --><strong>{fragment.content}</strong
-			><!--
+				><!--
   -->{:else if fragment.type === 'link'}<!--
     --><a
-				onclick={handle_link_click}
-				style="anchor-name: --{path.join('-') + '-' + fragment.annotation_index};"
-				href={fragment.href}
-				target={fragment.target || '_self'}>{fragment.content}</a
-			><!--
+					onclick={handle_link_click}
+					style="anchor-name: --{path.join('-') + '-' + fragment.annotation_index};"
+					href={fragment.href}
+					target={fragment.target || '_self'}>{fragment.content}</a
+				><!--
   -->{:else}<!--
     -->{fragment.content}<!--
   -->{/if}<!--
 -->{/each}<!--
 -->
-</div>
+	</div>
+{:else}
+	<svelte:element this={element} class={css_class}>
+		<!--
+--><!-- Zero-width space for empty text --><!--
+-->{#if plain_text.length === 0}&#8203;{/if}<!--
+-->{#each fragments as fragment, index}<!--
+  -->{#if typeof fragment === 'string'}<!--
+    -->{fragment}<!--
+  -->{:else if fragment.type === 'emphasis'}<!--
+    --><em
+					>{fragment.content}</em
+				><!--
+  -->{:else if fragment.type === 'strong'}<!--
+    --><strong>{fragment.content}</strong
+				><!--
+  -->{:else if fragment.type === 'link'}<!--
+    --><a
+					onclick={handle_link_click}
+					style="anchor-name: --{path.join('-') + '-' + fragment.annotation_index};"
+					href={fragment.href}
+					target={fragment.target || '_self'}>{fragment.content}</a
+				><!--
+  -->{:else}<!--
+    -->{fragment.content}<!--
+  -->{/if}<!--
+-->{/each}<!--
+-->
+	</svelte:element>
+{/if}
 
 <style>
 	div {

@@ -1,7 +1,14 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import { SESv2Client, ListContactListsCommand } from '@aws-sdk/client-sesv2';
+import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
+import type { SendEmailCommandInput } from '@aws-sdk/client-sesv2';
 
-import { AWS_BUCKET_NAME, AWS_ACCESSKEY, AWS_REGION, AWS_SECRETKEY } from '$env/static/private';
+import {
+	AWS_BUCKET_NAME,
+	AWS_ACCESSKEY,
+	AWS_REGION,
+	AWS_SECRETKEY,
+	EMAIL_TO
+} from '$env/static/private';
 
 const REGION = AWS_REGION;
 const ACCESS_KEY = AWS_ACCESSKEY;
@@ -24,11 +31,7 @@ const config = {
 	signatureVersion: 'v4'
 };
 
-/**
- *
- * @param {string} key
- */
-export async function PresignedGET(key, bucket = BUCKET) {
+export async function PresignedGET(key: string, bucket = BUCKET) {
 	const { PutObjectCommand } = await import('@aws-sdk/client-s3');
 	const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
 
@@ -43,11 +46,7 @@ export async function PresignedGET(key, bucket = BUCKET) {
 	}
 }
 
-/**
- *
- * @param {string} key
- */
-export async function signedURL(key, bucket = BUCKET) {
+export async function signedURL(key: string, bucket = BUCKET) {
 	console.log(':::Signing', key, bucket);
 	const { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = await import(
 		'@aws-sdk/client-s3'
@@ -66,6 +65,40 @@ export async function signedURL(key, bucket = BUCKET) {
 		}; // expires in seconds
 	} catch (error) {
 		console.error(':::Zvadhakwa', error);
+		return null;
+	}
+}
+
+export async function sendMail(payload: { body: string; subject: string }) {
+	const client = new SESv2Client({
+		credentials: { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET },
+		region: REGION
+	});
+	const params: SendEmailCommandInput = {
+		Content: {
+			Simple: {
+				Body: {
+					Text: {
+						Data: payload.body
+					}
+				},
+				Subject: {
+					Data: payload.subject
+				}
+			}
+		},
+		Destination: {
+			ToAddresses: [EMAIL_TO]
+		},
+		FromEmailAddress: EMAIL_TO // Replace with a verified email in SES
+	};
+	const command = new SendEmailCommand(params);
+
+	try {
+		const data = await client.send(command);
+		return data;
+	} catch (error: any) {
+		console.error(error.$response);
 		return null;
 	}
 }
