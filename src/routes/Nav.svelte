@@ -25,10 +25,10 @@
 	<div class="drawer-content flex flex-col">
 		<!-- Navbar -->
 		<div class="navbar absolute top-0 right-0 left-0 z-40 container mx-auto w-full bg-transparent">
-			<div class="relative z-40 mr-2 flex-1 pr-2">
-				{#if $page.url.pathname !== '/'}
-					<a href="/"><Logo></Logo></a>
-				{/if}
+			<div class="relative z-40 mr-2 flex-1 pt-2 pr-2">
+				<a class="" href="/"
+					><Logo --text-colored={$page.url.pathname === '/' ? '#ffffff' : '#006938'}></Logo></a
+				>
 			</div>
 			<div class="hidden flex-none lg:block">
 				<ul
@@ -37,9 +37,16 @@
 					class="menu menu-horizontal"
 				>
 					<!-- Navbar menu content here -->
-					<li><a class="no-underline" href="/">About</a></li>
-					<li><a class="no-underline" href="/produce">Produce</a></li>
-					<li><a class=" no-underline" href="/contact">Contact</a></li>
+					<li>
+						<a class="no-underline" href="/">About</a>
+						{@render highlighter('/')}
+					</li>
+					<li>
+						<a class="no-underline" href="/produce">Produce</a>{@render highlighter('/produce')}
+					</li>
+					<li>
+						<a class=" no-underline" href="/contact">Contact</a>{@render highlighter('/contact')}
+					</li>
 					<!-- <div class="dropdown dropdown-end dropdown-hover">
 						<div tabindex="0" role="button" class="the-drop">Brands</div>
 						<ul
@@ -122,6 +129,16 @@
 		{@render children()}
 		{@render footer()}
 	</div>
+
+	{#snippet highlighter(path)}
+		{#if $page.url.pathname === path}
+			<span
+				class:border-white={$page.url.pathname === '/'}
+				class:border-green-800={$page.url.pathname !== '/'}
+				class="mx-auto w-6 rounded-none border-b-2"
+			></span>
+		{/if}
+	{/snippet}
 
 	{#snippet footer()}
 		<footer class="footer sm:footer-horizontal bg-base-300 p-10 text-white">

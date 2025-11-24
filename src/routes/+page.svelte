@@ -86,7 +86,7 @@
 	squareImage={{ url: img3, alt: '' }}
 	ogLanguage={'en-UK'}
 />
-<!-- <SEO
+<SEO
 	{siteUrl}
 	{siteTitle}
 	services={[]}
@@ -99,7 +99,7 @@
 	{twitterHandle}
 	{address}
 	{linkedinProfile}
-/> -->
+/>
 
 <!-- <ViewTransition></ViewTransition> -->
 {#if showLightbox}
@@ -119,7 +119,11 @@
 	{/if}
 
 	<div class="relative h-screen w-full overflow-hidden">
-		<img class="relative h-full w-full object-cover" src="/images/vergefresh-hero-01.jpg" alt="" />
+		<img
+			class="relative h-full w-full object-cover"
+			src="{data.cloudfront}/1920x0/kuminda-norton-28.jpg"
+			alt=""
+		/>
 		<div
 			class="from-base-300/80 via-base-300/50 absolute top-0 right-0 bottom-0 left-0 h-72 bg-gradient-to-b to-transparent"
 		></div>

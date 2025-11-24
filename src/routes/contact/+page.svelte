@@ -20,6 +20,7 @@
 	import TextToolBar from '$lib/TextToolBar.svelte';
 	import HeaderBlock from '$lib/HeaderBlock.svelte';
 	import { enhance } from '$app/forms';
+	import ViewTransition from '$lib/components/ViewTransition.svelte';
 	let { data, form }: { data: PageData; form: any } = $props();
 
 	let page_json = $state(data.entry);
@@ -101,7 +102,7 @@
 <svelte:head>
 	<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 </svelte:head>
-
+<!-- <ViewTransition></ViewTransition> -->
 <div class="demo-wrapper pb-10">
 	{#if data.user?.exists}
 		<TextToolBar {entry_session} />

@@ -11,6 +11,7 @@
 	// Import Utilities
 	import { dev } from '$app/environment';
 	import type { PageData } from './$types';
+	import ViewTransition from '$lib/components/ViewTransition.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -19,6 +20,7 @@
 	let entry_session = new EntrySession(page_json);
 </script>
 
+<!-- <ViewTransition></ViewTransition> -->
 <div class="demo-wrapper md:pb-10">
 	{#if data.user?.exists}
 		<TextToolBar {entry_session} />
