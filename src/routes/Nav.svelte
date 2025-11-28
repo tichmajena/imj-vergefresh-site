@@ -24,8 +24,8 @@
 	<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col">
 		<!-- Navbar -->
-		<div class="navbar absolute top-0 right-0 left-0 z-40 container mx-auto w-full bg-transparent">
-			<div class="relative z-40 mr-2 flex-1 pt-2 pr-2">
+		<div class="navbar absolute top-0 right-0 left-0 z-10 container mx-auto w-full bg-transparent">
+			<div class="mr-2 flex-1 pt-4 pl-4">
 				<a class="" href="/"
 					><Logo --text-colored={$page.url.pathname === '/' ? '#ffffff' : '#006938'}></Logo></a
 				>
@@ -106,8 +106,14 @@
 					</form>
 				</ul>
 			</div>
-			<div class="flex-none pr-6 lg:hidden">
-				<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+			<div class="flex-none pr-2 lg:hidden">
+				<label
+					class:text-white={$page.url.pathname === '/'}
+					class:text-green-800={$page.url.pathname !== '/'}
+					for="my-drawer-3"
+					aria-label="open sidebar"
+					class="btn btn-square btn-ghost hover:text-green-800"
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -209,7 +215,7 @@
 
 	<div class="drawer-side">
 		<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-		<ul class="menu min-h-full w-80 bg-[#006838] p-4 text-white">
+		<ul class="menu min-h-full w-60 bg-[#006838] p-4 text-white">
 			<!-- Sidebar content here -->
 			<li><a class="no-underline" href="/">About</a></li>
 			<li><a class="no-underline" href="/produce">Produce</a></li>

@@ -118,9 +118,9 @@
 		<TextToolBar {entry_session} />
 	{/if}
 
-	<div class="relative h-screen w-full overflow-hidden">
+	<div class="relative h-[80vh] w-full overflow-hidden md:h-screen">
 		<img
-			class="relative h-full w-full object-cover"
+			class="relative h-full w-full object-cover object-[60%_100%] md:object-center"
 			src="{data.cloudfront}/1920x0/kuminda-norton-28.jpg"
 			alt=""
 		/>

@@ -16,13 +16,13 @@
 </script>
 
 <div
-	class="story-block layout-{block.layout} {block.classes} container mx-auto flex w-full"
+	class="story-block layout-{block.layout} {block.classes} container mx-auto flex w-full space-x-4 py-2 md:px-12 md:py-6"
 	data-path={path.join('.')}
 	data-type="block"
 	data-index={path.at(-1)}
 	style="anchor-name: --{path.join('-')};"
 >
-	<div class="non-text-content relative shrink-0 overflow-hidden pt-6" contenteditable="false">
+	<div class="non-text-content relative shrink-0 overflow-hidden" contenteditable="false">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
 
 		<!-- <img
@@ -35,7 +35,7 @@
 		<div class="absolute top-0 right-0 bottom-0 left-0 opacity-40 {block.classes}"></div>
 	</div>
 
-	<div class="caption px-6 pt-6 pb-12 md:px-12">
+	<div class="caption">
 		<!-- ATTENTION: Do not format the following lines, as whitespace will mess up contenteditable -->
 		<Text class="heading2 text-green-800" path={[...path, 'title']} {editable} element={h} />
 		<Text class="body font-light" path={[...path, 'description']} {editable} element={p} />
