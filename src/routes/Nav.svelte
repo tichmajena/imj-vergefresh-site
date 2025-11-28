@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Logo from '../lib/assets/Logo.svelte';
 	import Mail from '$icons/IconMail.svelte';
 	import Telephone from '$icons/IconPhone.svelte';
@@ -12,28 +12,36 @@
 	import IconYoutube from '$icons/IconYoutube.svelte';
 	import IconFacebook from '$icons/IconFacebook.svelte';
 	import { fade, fly, slide } from 'svelte/transition';
+	import IconClose from '$icons/IconClose.svelte';
 
 	let { children, socials, url } = $props();
 
 	let title = '',
 		image = '',
 		slug = '';
+	let menuOpen = $state(false);
+
+	$effect(() => {
+		page.url.pathname;
+		menuOpen = false;
+	});
 </script>
 
-<div data-theme={$page.data.theme} class="drawer drawer-end !bg-base-100">
-	<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+<div data-theme={page.data.theme} class="drawer drawer-end !bg-base-100">
+	<input id="my-drawer-3" bind:checked={menuOpen} type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col">
 		<!-- Navbar -->
 		<div class="navbar absolute top-0 right-0 left-0 z-10 container mx-auto w-full bg-transparent">
 			<div class="mr-2 flex-1 pt-4 pl-4">
 				<a class="" href="/"
-					><Logo --text-colored={$page.url.pathname === '/' ? '#ffffff' : '#006938'}></Logo></a
+					><Logo --text-colored={page.url.pathname === '/' || menuOpen ? '#ffffff' : '#006938'}
+					></Logo></a
 				>
 			</div>
 			<div class="hidden flex-none lg:block">
 				<ul
-					class:text-white={$page.url.pathname === '/'}
-					class:text-green-800={$page.url.pathname !== '/'}
+					class:text-white={page.url.pathname === '/'}
+					class:text-green-800={page.url.pathname !== '/'}
 					class="menu menu-horizontal"
 				>
 					<!-- Navbar menu content here -->
@@ -68,7 +76,7 @@
 
 					<form
 						use:enhance
-						action="/?/setTheme&theme={$page.data.theme === 'dark' ? 'light' : 'dark'}"
+						action="/?/setTheme&theme={page.data.theme === 'dark' ? 'light' : 'dark'}"
 						method="post"
 					>
 						<button
@@ -79,8 +87,8 @@
 
 							<!-- sun icon -->
 							<svg
-								class:swap-on={$page.data.theme === 'light'}
-								class:swap-off={$page.data.theme === 'dark'}
+								class:swap-on={page.data.theme === 'light'}
+								class:swap-off={page.data.theme === 'dark'}
 								class="absolute right-2 h-4 w-4 fill-current"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
@@ -92,8 +100,8 @@
 
 							<!-- moon icon -->
 							<svg
-								class:swap-on={$page.data.theme === 'dark'}
-								class:swap-off={$page.data.theme === 'light'}
+								class:swap-on={page.data.theme === 'dark'}
+								class:swap-off={page.data.theme === 'light'}
 								class="absolute right-2 h-4 w-4 fill-current"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
@@ -108,25 +116,29 @@
 			</div>
 			<div class="flex-none pr-2 lg:hidden">
 				<label
-					class:text-white={$page.url.pathname === '/'}
-					class:text-green-800={$page.url.pathname !== '/'}
+					class:text-white={page.url.pathname === '/' || menuOpen}
+					class:text-green-800={page.url.pathname !== '/' && !menuOpen}
 					for="my-drawer-3"
 					aria-label="open sidebar"
 					class="btn btn-square btn-ghost hover:text-green-800"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						class="inline-block h-6 w-6 stroke-current"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h16"
-						></path>
-					</svg>
+					{#if menuOpen}
+						<IconClose />
+					{:else}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							class="inline-block h-6 w-6 stroke-current"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							></path>
+						</svg>
+					{/if}
 				</label>
 			</div>
 		</div>
@@ -137,10 +149,10 @@
 	</div>
 
 	{#snippet highlighter(path)}
-		{#if $page.url.pathname === path}
+		{#if page.url.pathname === path}
 			<span
-				class:border-white={$page.url.pathname === '/'}
-				class:border-green-800={$page.url.pathname !== '/'}
+				class:border-white={page.url.pathname === '/'}
+				class:border-green-800={page.url.pathname !== '/'}
 				class="mx-auto w-6 rounded-none border-b-2"
 			></span>
 		{/if}
@@ -215,7 +227,7 @@
 
 	<div class="drawer-side">
 		<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-		<ul class="menu min-h-full w-60 bg-[#006838] p-4 text-white">
+		<ul class="menu min-h-full w-full bg-[#006838] px-4 pt-40 pb-4 text-2xl text-white">
 			<!-- Sidebar content here -->
 			<li><a class="no-underline" href="/">About</a></li>
 			<li><a class="no-underline" href="/produce">Produce</a></li>

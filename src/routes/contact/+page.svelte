@@ -166,7 +166,7 @@
 					</form>
 				</div>
 				<div class="flex w-full flex-col md:w-1/3 lg:w-1/2">
-					<div class="flex w-fit flex-row space-x-6">
+					<div class="flex w-fit flex-row space-x-3">
 						<div class="w-6">
 							<Location />
 						</div>
@@ -183,7 +183,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="flex w-fit flex-row space-x-6">
+					<div class="flex w-fit flex-row space-x-3">
 						<div class="w-6">
 							<Telephone />
 						</div>
@@ -193,7 +193,7 @@
 							</a>
 						</div>
 					</div>
-					<div class="flex w-fit flex-row space-x-6">
+					<div class="flex w-fit flex-row space-x-3">
 						<div class="w-6">
 							<Mail />
 						</div>
@@ -203,7 +203,7 @@
 							</a>
 						</div>
 					</div>
-					<div class="flex w-fit flex-row space-x-6">
+					<div class="flex w-fit flex-row space-x-3">
 						<div class="w-6">
 							<Clock />
 						</div>

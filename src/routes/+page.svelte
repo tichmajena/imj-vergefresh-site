@@ -133,8 +133,18 @@
 		<!-- NOTE: non-editable island must have contenteditable="false" and contain some text content, otherwise invalid selections occur. -->
 		<div class="container mx-auto px-6 py-20">
 			<div class="w-full max-w-screen-lg md:w-2/3">
-				<Text path={['title']} class="mb-4 text-3xl font-bold text-green-800 md:text-4xl" />
-				<Text path={['subtitle']} class="text-xl md:text-2xl" />
+				<Text
+					editable={data.user?.exists === true}
+					element="h1"
+					path={['title']}
+					class="mb-4 text-5xl font-bold text-green-800 "
+				/>
+				<Text
+					editable={data.user?.exists === true}
+					element="p"
+					path={['subtitle']}
+					class="text-xl md:text-2xl"
+				/>
 			</div>
 		</div>
 		<Container class="body flex-column gap-y-10" path={['body']}>
